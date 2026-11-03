@@ -5,13 +5,10 @@
 
 ---
 
-## 🌐 Quick Access & Website Links
+## 🌐 Website Link
 
-| Resource | Link | Description |
-| :--- | :--- | :--- |
-| 🚀 **Live Web App (AI Studio)** | [**ai.studio/apps/3af4aacf-0ec7-4f07-ae58-c126210bff8f**](https://ai.studio/apps/3af4aacf-0ec7-4f07-ae58-c126210bff8f) | Cloud deployment on Google AI Studio |
-| 💻 **Local Development Server** | [**http://localhost:3000**](http://localhost:3000) | Local server endpoint when running `npm run dev` |
-| 🏛️ **Official GATE 2027 Portal** | [**gate2027.iitm.ac.in**](https://gate2027.iitm.ac.in/) | Official organizing institute (IIT Madras) updates & notifications |
+- 🔗 **Official Website & Repository**: [https://github.com/alekhyaashwini/GATE-2027](https://github.com/alekhyaashwini/GATE-2027)
+- 🚀 **Live Web Application**: [https://alekhyaashwini.github.io/GATE-2027/](https://alekhyaashwini.github.io/GATE-2027/)
 
 ---
 
