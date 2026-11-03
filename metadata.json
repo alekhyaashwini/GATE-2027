@@ -1,0 +1,6 @@
+{
+  "name": "GATE Quest 2027",
+  "description": "Gamified learning and exam preparation platform for GATE 2027 in Robotics & Automation (RA) and Data Science & AI (DA), featuring syllabus quest map, KaTeX notes workspace, countdown timer, practice arena, mistake notebook, and interactive simulations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
