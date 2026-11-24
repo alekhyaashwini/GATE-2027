@@ -12,7 +12,7 @@ import { SYLLABUS_NODES } from '../data/syllabusData';
 import { QUESTION_BANK } from '../data/questionBank';
 import { DETAILED_TOPIC_NOTES } from '../data/topicNotesData';
 
-export type ActiveTab = 'syllabus' | 'practice' | 'mock' | 'aptitude' | 'simulations' | 'notes' | 'formulas';
+export type ActiveTab = 'dashboard' | 'syllabus' | 'practice' | 'mock' | 'aptitude' | 'simulations' | 'notes' | 'formulas';
 
 interface AppContextType {
   activePaper: PaperType;
@@ -115,7 +115,7 @@ export function createDefaultNoteTemplate(topicId: string): StructuredUserNote {
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activePaper, setActivePaper] = useState<PaperType>('RA');
-  const [activeTab, setActiveTab] = useState<ActiveTab>('syllabus');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>('ra-robotics-kinematics-transforms');
   
   // Default first exam weekend per 8.12: 6 Feb 2027

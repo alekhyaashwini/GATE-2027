@@ -22,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   const unresolvedCount = paperMistakes.filter(m => !m.resolved).length;
 
   const navItems: { id: ActiveTab; label: string }[] = [
+    { id: 'dashboard', label: 'Dashboard' },
     { id: 'syllabus', label: 'Syllabus' },
     { id: 'notes', label: 'Notes Workspace' },
     { id: 'formulas', label: 'Formula Sheets' },
@@ -38,7 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Zone 1: Brand Wordmark */}
         <div className="flex items-center gap-3 shrink-0">
           <button
-            onClick={() => setActiveTab('syllabus')}
+            onClick={() => setActiveTab('dashboard')}
             className="text-lg font-bold tracking-tight text-white hover:text-amber-400 transition-colors whitespace-nowrap shrink-0 flex items-center gap-2"
           >
             <span className="text-amber-400 font-mono">GATE</span>

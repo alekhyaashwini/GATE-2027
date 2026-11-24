@@ -14,6 +14,7 @@ import { SimulationsView } from './components/simulations/SimulationsView';
 import { FormulaCheatSheetsView } from './components/formulas/FormulaCheatSheetsView';
 import { GeneralAptitudeView } from './components/aptitude/GeneralAptitudeView';
 import { AiMistakeAnalystModal } from './components/mistakes/AiMistakeAnalystModal';
+import { DashboardView } from './components/dashboard/DashboardView';
 
 function AppContent() {
   const { activeTab, activeTestSession } = useApp();
@@ -44,6 +45,11 @@ function AppContent() {
         )}
 
         {/* Dynamic Tab Views */}
+        {activeTab === 'dashboard' && (
+          <ErrorBoundary moduleName="Dashboard">
+            <DashboardView />
+          </ErrorBoundary>
+        )}
         {activeTab === 'syllabus' && (
           <ErrorBoundary moduleName="Syllabus Quest">
             <SyllabusQuestView />
