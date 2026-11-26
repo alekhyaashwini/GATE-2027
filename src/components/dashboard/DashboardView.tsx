@@ -13,11 +13,13 @@ import {
   ChevronRight,
   BookOpen,
   Target,
-  Sparkles
+  Sparkles,
+  Cpu,
+  Brain
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
-// Subject definition structure matching user's specification
+// Subject definition structure for Syllabus Checklist
 interface DashboardSubject {
   id: string;
   name: string;
@@ -25,60 +27,223 @@ interface DashboardSubject {
   topics: string[];
 }
 
-// 1. ECE Syllabus Breakdown (from user snippet)
-const ECE_SUBJECTS: DashboardSubject[] = [
-  { id: 'net', name: 'Networks', phase: 1, topics: ['Solution methods & theorems', 'Transient analysis (RL, RC, RLC)', 'Sinusoidal steady state & resonance', 'Two-port networks', 'Network graphs & state equations'] },
-  { id: 'sig', name: 'Signals & Systems', phase: 1, topics: ['Signal basics & LTI systems', 'Convolution', 'Fourier series & transform', 'Laplace transform', 'z-transform & DTFT', 'Sampling & DFT/FFT'] },
-  { id: 'dig', name: 'Digital Electronics', phase: 1, topics: ['Number systems & Boolean algebra', 'Combinational circuits', 'Sequential circuits & FSMs', 'Memories & logic families', 'ADC / DAC'] },
-  { id: 'ana', name: 'Analog Circuits', phase: 1, topics: ['Diode circuits', 'BJT / MOSFET biasing & small-signal', 'Amplifiers & frequency response', 'Op-amp circuits', 'Feedback & oscillators'] },
-  { id: 'edc', name: 'Electronic Devices (EDC)', phase: 1, topics: ['Semiconductor physics & carriers', 'PN junction & diodes', 'BJT & MOSFET devices', 'Optoelectronics & fabrication basics'] },
-  { id: 'con', name: 'Control Systems', phase: 2, topics: ['Block diagrams & signal flow', 'Time-domain analysis', 'Routh stability', 'Root locus', 'Bode & Nyquist', 'State-space & compensators'] },
-  { id: 'com', name: 'Communications', phase: 2, topics: ['Random processes & noise', 'AM / FM', 'Digital modulation', 'Information theory & capacity', 'Receivers, SNR & BER'] },
-  { id: 'em', name: 'Electromagnetics', phase: 2, topics: ['Vector calculus & Maxwell’s equations', 'Plane waves', 'Transmission lines & Smith chart', 'Waveguides', 'Antenna basics'] },
-  { id: 'mat', name: 'Engineering Maths', phase: 2, topics: ['Linear algebra', 'Calculus & vector calculus', 'Differential equations', 'Complex analysis & transforms', 'Probability & numerical methods'] },
-  { id: 'apt', name: 'General Aptitude', phase: 2, topics: ['Verbal ability', 'Numerical ability', 'Reasoning', 'Data interpretation'] }
-];
-
-// 2. RA Syllabus Breakdown (Robotics & Automation)
+// 1. RA Syllabus Breakdown (Robotics & Automation) - Official IIT Madras Gate 2027 Spec
 const RA_SUBJECTS: DashboardSubject[] = [
-  { id: 'ra_math', name: 'Engineering Mathematics', phase: 1, topics: ['Linear Algebra & Matrices', 'Calculus & Vector Calculus', 'Differential Equations', 'Numerical Methods', 'Probability & Statistics'] },
-  { id: 'ra_mech', name: 'Robot Kinematics & Dynamics', phase: 1, topics: ['Spatial Transformations & DH Parameters', 'Forward & Inverse Kinematics', 'Jacobians, Singularities & Statics', 'Euler-Lagrange & Newton-Euler Dynamics', 'Trajectory Generation'] },
-  { id: 'ra_elec', name: 'Actuators, Sensors & Electronics', phase: 1, topics: ['DC, Stepper & BLDC Motor Drives', 'Encoders, IMU, LiDAR & Vision Sensors', 'Signal Conditioning & ADC/DAC', 'Embedded Microcontrollers & PWM', 'Power Circuits & Battery Management'] },
-  { id: 'ra_ctrl', name: 'Control Systems for Robotics', phase: 2, topics: ['State-Space Modeling & Stability', 'PID & Computed Torque Control', 'Feedback Linearization', 'Trajectory Tracking & Disturbance Rejection', 'Digital & Optimal Control'] },
-  { id: 'ra_auto', name: 'Robot Autonomy, Navigation & AI', phase: 2, topics: ['Occupancy Grid Mapping & SLAM', 'A*, Dijkstra & RRT Path Planning', 'Computer Vision & Object Detection', 'ROS 2 Architecture & Pub-Sub', 'Reinforcement Learning in Robotics'] },
-  { id: 'ra_ind', name: 'Industrial Automation & PLC', phase: 2, topics: ['Ladder Logic & IEC 61131-3', 'Pneumatic & Hydraulic Actuation', 'Fieldbus, Modbus & Industrial Ethernet', 'Safety Standards & Risk Assessment', 'Flexible Manufacturing Systems'] },
-  { id: 'ra_ga', name: 'General Aptitude', phase: 2, topics: ['Quantitative Aptitude & Percentages', 'Spatial & Analytical Reasoning', 'English Comprehension & Grammar', 'Data Interpretation & Graphs'] }
+  { 
+    id: 'ra_math', 
+    name: 'Engineering Mathematics', 
+    phase: 1, 
+    topics: [
+      'Linear Algebra: Vector spaces, rank, eigenvalues & eigenvectors, Cayley-Hamilton',
+      'Calculus: Gradient, divergence, curl, line & surface integrals, Taylor series',
+      'Differential Equations: Higher-order linear ODEs, Cauchy-Euler, Laplace transforms',
+      'Numerical Methods: Newton-Raphson, Euler & Runge-Kutta, numerical integration',
+      'Probability & Statistics: Random variables, normal distribution, correlation & regression'
+    ] 
+  },
+  { 
+    id: 'ra_mechatronics', 
+    name: 'Basics of Mechatronics & Electronics', 
+    phase: 1, 
+    topics: [
+      'Sensors: Encoders, resolvers, LVDT, tachometers, strain gauges, IMU & LiDAR',
+      'Actuators: DC motors, stepper motors, BLDC drives, servo systems & PWM control',
+      'Signal Conditioning: Operational amplifiers, filtering, instrumentation amplifiers, ADC/DAC',
+      'Embedded Microcontrollers: GPIO, timers, interrupts, I2C, SPI & UART communication',
+      'Power Transmission: Harmonic drives, planetary gearboxes, lead screws & timing belts'
+    ] 
+  },
+  { 
+    id: 'ra_kinematics', 
+    name: 'Robot Kinematics & Coordinate Transforms', 
+    phase: 1, 
+    topics: [
+      'Spatial Transformations: Rotation matrices (SO(3)), Euler angles, angle-axis & quaternions',
+      'Homogeneous Transformation Matrices & frame composition rules',
+      'Denavit-Hartenberg (D-H) Convention: Standard and modified frame assignment',
+      'Forward Kinematics: Kinematic modeling of serial manipulators and SCARA robots',
+      'Inverse Kinematics: Analytical & geometric solutions, solvability & workspace singularities'
+    ] 
+  },
+  { 
+    id: 'ra_dynamics', 
+    name: 'Robot Dynamics & Trajectory Planning', 
+    phase: 1, 
+    topics: [
+      'Velocity Kinematics: Geometric & analytical Jacobians, singularity analysis, manipulability',
+      'Robot Dynamics: Euler-Lagrange equations of motion, mass matrix, Coriolis & gravity vectors',
+      'Newton-Euler Formulation: Recursive forward-backward dynamics algorithm',
+      'Trajectory Generation: Cubic & quintic polynomials, LSPB (trapezoidal) velocity profiles',
+      'Grippers & End-Effectors: Force closure, friction cones, grasp stability & payload capacity'
+    ] 
+  },
+  { 
+    id: 'ra_control', 
+    name: 'Control Systems for Robotics', 
+    phase: 2, 
+    topics: [
+      'System Modeling: Transfer functions, block diagram reduction, signal flow graphs',
+      'Time-Domain Analysis: Transient specs, damping ratio, steady-state error & error constants',
+      'Stability Analysis: Routh-Hurwitz criterion, Root Locus design & angle/magnitude conditions',
+      'Frequency Response: Bode plots, polar plots, Nyquist stability criterion, gain & phase margins',
+      'Robot Motion Control: Independent joint PID control, feedforward control, computed torque control'
+    ] 
+  },
+  { 
+    id: 'ra_cim', 
+    name: 'Industrial Automation, CIM & PLC', 
+    phase: 2, 
+    topics: [
+      'Programmable Logic Controllers (PLC): Architecture, scan cycle, ladder logic, timers & counters',
+      'Computer Integrated Manufacturing: FMS, automated cell control, group technology & CAPP',
+      'Material Handling: Automated Guided Vehicles (AGV), AS/RS systems & conveyor sequencing',
+      'CNC Systems: Machine axes, interpolators, tooling & G-code/M-code part programming',
+      'Industrial Networks: Fieldbus, Modbus, Profibus, Industrial Ethernet & OPC-UA protocols'
+    ] 
+  },
+  { 
+    id: 'ra_autonomy', 
+    name: 'Autonomous Robots & Robot Intelligence', 
+    phase: 2, 
+    topics: [
+      'Mobile Robot Kinematics: Differential drive, unicycle model, Ackermann steering & omni wheels',
+      'Mapping & Localization: Occupancy grid maps, Bayesian filtering, EKF-SLAM & graph SLAM',
+      'Path Planning: Dijkstra, A* heuristic search, RRT/RRT* sampling-based planning, potential fields',
+      'Robot Vision: Pinhole camera model, intrinsic/extrinsic calibration, stereo vision, visual odometry',
+      'Robot Operating System: ROS 2 computation graph, nodes, topics, services, actions & tf2'
+    ] 
+  },
+  { 
+    id: 'ra_aptitude', 
+    name: 'General Aptitude (Common 15 Marks)', 
+    phase: 2, 
+    topics: [
+      'Quantitative Aptitude: Percentages, ratios, time-speed-distance, work, basic combinatorics',
+      'Analytical Reasoning: Syllogisms, deductive logic, series completion, data sufficiency',
+      'Spatial Aptitude: Paper folding, 2D/3D transformations, pattern mirror reflections',
+      'Verbal Ability: Grammar, vocabulary, sentence completion, reading comprehension'
+    ] 
+  }
 ];
 
-// 3. DA Syllabus Breakdown (Data Science & AI)
+// 2. DA Syllabus Breakdown (Data Science & AI) - Official IIT Madras Gate 2027 Spec
 const DA_SUBJECTS: DashboardSubject[] = [
-  { id: 'da_math', name: 'Linear Algebra & Calculus', phase: 1, topics: ['Eigenvalues, Eigenvectors & SVD', 'Matrix Decompositions (LU, QR, Cholesky)', 'Multivariate Calculus & Gradient Descent', 'Vector Calculus & Jacobians', 'Taylor Series & Optimization Basics'] },
-  { id: 'da_prob', name: 'Probability & Statistics', phase: 1, topics: ['Random Variables & Distributions', 'Bayes Theorem & Conditional Probability', 'Hypothesis Testing & Confidence Intervals', 'Central Limit Theorem & Law of Large Numbers', 'Maximum Likelihood Estimation (MLE)'] },
-  { id: 'da_prog', name: 'Programming, Data Structures & Algorithms', phase: 1, topics: ['Python Programming & Vectorization', 'Arrays, Stacks, Queues & Hash Maps', 'Binary Trees & Graphs Traversal', 'Sorting, Searching & Big-O Complexity', 'Divide & Conquer, Dynamic Programming'] },
-  { id: 'da_db', name: 'Database Management & Warehousing', phase: 2, topics: ['Relational Model, ER Diagrams & Normalization', 'Advanced SQL Queries & Joins', 'Indexing, B-Trees & Query Optimization', 'NoSQL & Document Databases', 'Data Pipelines & Warehousing Basics'] },
-  { id: 'da_ml', name: 'Machine Learning', phase: 2, topics: ['Supervised Learning (Regression & Trees)', 'Unsupervised Learning (K-Means, PCA, GMM)', 'Ensemble Methods (Random Forest, XGBoost)', 'Model Evaluation (Precision, Recall, ROC-AUC)', 'Regularization (L1, L2, Elastic Net)'] },
-  { id: 'da_ai', name: 'Artificial Intelligence & Deep Learning', phase: 2, topics: ['Search Algorithms (Informed & Adversarial)', 'Feedforward Neural Networks & Backprop', 'Convolutional Neural Networks (CNNs)', 'Recurrent Networks (RNN, LSTM, Transformers)', 'Attention Mechanism & LLM Foundations'] },
-  { id: 'da_ga', name: 'General Aptitude', phase: 2, topics: ['Verbal Ability & Deductive Reasoning', 'Quantitative Ability & Series', 'Spatial Reasoning & Pattern Recognition', 'Data Analysis & Chart Interpretation'] }
+  { 
+    id: 'da_la', 
+    name: 'Linear Algebra', 
+    phase: 1, 
+    topics: [
+      'Vector Spaces: Subspaces, linear independence, basis, dimension & rank-nullity theorem',
+      'Matrices & Systems: Determinants, inverse, Gaussian elimination, row echelon form',
+      'Eigenvalues & Eigenvectors: Characteristic equation, diagonalization, spectral theorem',
+      'Matrix Decompositions: LU, QR decomposition, Cholesky factorization',
+      'Singular Value Decomposition (SVD): Low-rank approximation & pseudo-inverse applications'
+    ] 
+  },
+  { 
+    id: 'da_calc', 
+    name: 'Calculus & Optimization', 
+    phase: 1, 
+    topics: [
+      'Functions of Single Variable: Limits, continuity, differentiability, mean value theorems',
+      'Multivariable Calculus: Partial derivatives, directional derivative, gradient, Hessian matrix',
+      'Taylor Series: Multivariate Taylor expansions, maxima, minima & saddle point analysis',
+      'Convex Optimization: Convex sets, convex functions, epigraph, Jensen’s inequality',
+      'Optimization Algorithms: Gradient descent, SGD, momentum, Adam, Lagrange multipliers, KKT conditions'
+    ] 
+  },
+  { 
+    id: 'da_prob', 
+    name: 'Probability & Statistics', 
+    phase: 1, 
+    topics: [
+      'Probability Foundations: Sample space, axioms, conditional probability, Bayes’ theorem, independence',
+      'Random Variables: PMF, PDF, CDF, expectation, variance, covariance & correlation coefficient',
+      'Distributions: Bernoulli, Binomial, Poisson, Uniform, Exponential, Gaussian (Normal), Central Limit Theorem',
+      'Estimation Theory: Law of large numbers, Maximum Likelihood Estimation (MLE), point estimation',
+      'Hypothesis Testing: Null/alternative hypotheses, Type I/II errors, p-values, z-test, t-test, Chi-square'
+    ] 
+  },
+  { 
+    id: 'da_prog', 
+    name: 'Programming, Data Structures & Algorithms', 
+    phase: 1, 
+    topics: [
+      'Python Programming: Syntax, functions, OOP, list comprehensions, Numpy & Pandas basics',
+      'Basic Data Structures: Arrays, singly/doubly linked lists, stacks, queues, hash tables',
+      'Trees & Graphs: Binary search trees (BST), balanced trees, binary heaps, adjacency list/matrix',
+      'Searching & Sorting: Binary search, quicksort, mergesort, heapsort, Big-O asymptotic analysis',
+      'Algorithm Paradigms: Divide & conquer, dynamic programming, memoization, greedy strategies'
+    ] 
+  },
+  { 
+    id: 'da_dbms', 
+    name: 'Database Management & Data Warehousing', 
+    phase: 2, 
+    topics: [
+      'Relational Model: Relational algebra, domain constraints, integrity rules, ER diagrams',
+      'SQL Mastery: DDL, DML, complex multi-table JOINs, nested subqueries, aggregations & GROUP BY',
+      'Normalization: Functional dependencies, attribute closure, candidate keys, 1NF, 2NF, 3NF & BCNF',
+      'Indexing & Storage: B-trees, B+ trees, hash indexes, query evaluation & execution plans',
+      'Transactions & Warehousing: ACID properties, conflict serializability, WAL, star/snowflake schemas'
+    ] 
+  },
+  { 
+    id: 'da_ml', 
+    name: 'Machine Learning', 
+    phase: 2, 
+    topics: [
+      'Supervised Learning: Linear regression, Ridge (L2), Lasso (L1), polynomial regression',
+      'Classification: Logistic regression, k-Nearest Neighbors (k-NN), Naive Bayes, Decision Trees',
+      'Support Vector Machines (SVM): Hard/soft margin, kernel trick, slack variables & dual problem',
+      'Ensemble Methods: Bagging, Random Forests, Gradient Boosted Trees, XGBoost, LightGBM',
+      'Unsupervised Learning: K-Means clustering, Hierarchical clustering, DBSCAN, PCA dimensionality reduction',
+      'Model Validation: Bias-variance tradeoff, cross-validation, precision, recall, F1-score, ROC-AUC'
+    ] 
+  },
+  { 
+    id: 'da_ai', 
+    name: 'Artificial Intelligence & Deep Learning', 
+    phase: 2, 
+    topics: [
+      'Heuristic Search: Uninformed search (BFS, DFS), Informed search (A*, Greedy Best-First, admissibility)',
+      'Adversarial Search: Minimax algorithm, Alpha-Beta pruning, game playing algorithms',
+      'Knowledge Representation: Propositional logic, first-order predicate logic, inference rules & resolution',
+      'Neural Networks: Perceptrons, Multi-Layer Perceptrons, forward pass, backpropagation, activation functions',
+      'Deep Architectures: Convolutional Neural Networks (CNN), Recurrent Networks (RNN, LSTM), Transformers basics'
+    ] 
+  },
+  { 
+    id: 'da_aptitude', 
+    name: 'General Aptitude (Common 15 Marks)', 
+    phase: 2, 
+    topics: [
+      'Quantitative Aptitude: Percentages, ratios, series, permutations & combinations, probability',
+      'Analytical Reasoning: Deductive inference, syllogisms, truth-teller logic, graph analysis',
+      'Spatial Aptitude: 2D shape assembly, mirror reflection, rotational transformations',
+      'Verbal Ability: Grammar correction, vocabulary, contextual comprehension, sentence ordering'
+    ] 
+  }
 ];
 
 // Study Phase Schedule
 const PHASES = [
   { n: '1. Core Foundations', s: '2026-11-11', e: '2026-12-06' },
-  { n: '2. Advanced & Remaining', s: '2026-12-07', e: '2026-12-31' },
+  { n: '2. Advanced & Branch Modules', s: '2026-12-07', e: '2026-12-31' },
   { n: '3. Practice & PYQ Revision', s: '2027-01-01', e: '2027-01-24' },
   { n: '4. Final Mock Stretch', s: '2027-01-25', e: '2027-02-05' }
 ];
 
 const PLAN_TOTAL_HOURS = 369;
 const WEEKLY_TARGET_HOURS = 30;
-const STORAGE_KEY = 'gate2027_dashboard_progress_v2';
+const STORAGE_KEY = 'gate2027_dashboard_progress_v3';
 
 interface DashboardState {
   done: Record<string, boolean>; // key: subjectId + index
   mocks: Array<{ d: string; s: number }>;
   hours: Record<string, number>; // dateStr -> hours
   exam: string; // ISO date 'YYYY-MM-DD'
-  selectedTrack: 'ECE' | 'RA' | 'DA';
+  selectedTrack: 'RA' | 'DA';
 }
 
 const parseDate = (s: string) => {
@@ -104,10 +269,11 @@ const calcPercent = (part: number, total: number) =>
   total > 0 ? Math.round((part / total) * 100) : 0;
 
 export const DashboardView: React.FC = () => {
-  const { setActiveTab } = useApp();
+  const { activePaper, setActivePaper, setActiveTab } = useApp();
 
-  // Dashboard state
+  // Dashboard state: strictly RA or DA
   const [state, setState] = useState<DashboardState>(() => {
+    const initialTrack: 'RA' | 'DA' = activePaper === 'DA' ? 'DA' : 'RA';
     const defaultState: DashboardState = {
       done: {},
       mocks: [
@@ -117,19 +283,31 @@ export const DashboardView: React.FC = () => {
       ],
       hours: {},
       exam: '2027-02-06',
-      selectedTrack: 'ECE'
+      selectedTrack: initialTrack
     };
 
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return { ...defaultState, ...JSON.parse(stored) };
+        const parsed = JSON.parse(stored);
+        // Force track to be RA or DA only (sanitize any old ECE reference)
+        const validTrack: 'RA' | 'DA' = parsed.selectedTrack === 'DA' ? 'DA' : 'RA';
+        return { ...defaultState, ...parsed, selectedTrack: validTrack };
       }
     } catch {
       // fallback
     }
     return defaultState;
   });
+
+  // Keep state.selectedTrack in sync with AppContext activePaper
+  useEffect(() => {
+    if (activePaper === 'RA' || activePaper === 'DA') {
+      if (state.selectedTrack !== activePaper) {
+        setState(prev => ({ ...prev, selectedTrack: activePaper }));
+      }
+    }
+  }, [activePaper]);
 
   // Form inputs
   const [hourInput, setHourInput] = useState<string>('');
@@ -146,11 +324,9 @@ export const DashboardView: React.FC = () => {
     }
   }, [state]);
 
-  // Current track subjects
+  // Current track subjects: ONLY RA or DA
   const currentSubjects = useMemo(() => {
-    if (state.selectedTrack === 'RA') return RA_SUBJECTS;
-    if (state.selectedTrack === 'DA') return DA_SUBJECTS;
-    return ECE_SUBJECTS;
+    return state.selectedTrack === 'DA' ? DA_SUBJECTS : RA_SUBJECTS;
   }, [state.selectedTrack]);
 
   // Calculations
@@ -222,27 +398,39 @@ export const DashboardView: React.FC = () => {
     timelinePinPercent = Math.min(99.5, Math.max(0, (elapsedDays / totalPhaseSpanDays) * 100));
   }
 
-  // Today's focus & plan
+  // Today's focus & plan tailored specifically for RA / DA
   const dayOfWeekIndex = now.getDay();
   const dayName = now.toLocaleDateString('en-GB', { weekday: 'long' });
-  const FOCUS_PHASE_DESCRIPTIONS = [
-    'Core foundations: Network Analysis, Signals & Systems, Digital Logic, Electronic Devices',
-    'Branch depths: Control Systems, Analog, Communications, Advanced Maths & Aptitude',
-    'Practice & revision: Previous-year questions, intense sectional mock tests, formula drilling',
-    'Final stretch: Full 3-hour mocks in exact GATE exam slot, formula revision, error notebook review'
+
+  const RA_PHASE_DESCRIPTIONS = [
+    'Core foundations: Engineering Maths, Linear Algebra, Robot Kinematics (D-H parameters) & Mechatronics',
+    'Advanced Robotics: Robot Dynamics (Lagrangian), State-Space Control, PLC/CIM & Autonomous SLAM',
+    'Intense practice: Previous year papers, sectional mock tests on robot kinematics & trajectory control',
+    'Final stretch: Full 3-hour mocks in actual GATE slot (9:30 AM), formula cheat sheets & mistake notebook review'
   ];
+
+  const DA_PHASE_DESCRIPTIONS = [
+    'Core foundations: Linear Algebra (SVD, Eigenvalues), Multivariate Calculus, Probability, Python & Algorithms',
+    'Machine Learning & Databases: Relational SQL, Normalization, SVM, Tree Ensembles, Deep Neural Networks',
+    'Intense practice: High-yield problem solving, mock tests on optimization, regression & SQL query execution',
+    'Final stretch: Full 3-hour mocks in actual GATE slot (9:30 AM), formula cheat sheets & error pattern revision'
+  ];
+
+  const currentPhaseDescription = state.selectedTrack === 'DA' 
+    ? DA_PHASE_DESCRIPTIONS[Math.max(0, currentPhaseIndex)] 
+    : RA_PHASE_DESCRIPTIONS[Math.max(0, currentPhaseIndex)];
 
   let dailyRecommendation = '';
   if (currentPhaseIndex <= 1) {
     if (dayOfWeekIndex === 6) { // Saturday
-      dailyRecommendation = '4 hrs on week’s next unchecked syllabus topics + 3 hrs timed problem solving';
+      dailyRecommendation = `4 hrs on week’s next unchecked ${state.selectedTrack} syllabus topics + 3 hrs timed problem solving`;
     } else if (dayOfWeekIndex === 0) { // Sunday
-      dailyRecommendation = '3 hrs weekly consolidation + 1 hr sectional test; dedicate evening to Engineering Maths & General Aptitude';
+      dailyRecommendation = '3 hrs weekly consolidation + 1 hr sectional test; dedicate evening to Engineering Maths & General Aptitude (15M)';
     } else {
-      dailyRecommendation = '2.5 hrs deep subject theory & notes + 1.5 hrs high-yield PYQ practice on the same topic';
+      dailyRecommendation = `2.5 hrs deep subject theory & notes on ${state.selectedTrack} + 1.5 hrs high-yield practice on the same topic`;
     }
   } else if (currentPhaseIndex === 2) {
-    dailyRecommendation = '2 full length mocks this week (3 hrs each); spend equal time analyzing mistake log. Otherwise PYQs & weak-topic recovery.';
+    dailyRecommendation = '2 full-length mocks this week (3 hrs each); spend equal time analyzing mistake log. Otherwise PYQs & weak-topic recovery.';
   } else {
     dailyRecommendation = 'One full mock test every 2–3 days during your actual exam slot time (9:30 AM - 12:30 PM). Revise formula cheat sheets and sleep at least 7.5 hrs.';
   }
@@ -323,9 +511,10 @@ export const DashboardView: React.FC = () => {
     setState(prev => ({ ...prev, exam: examDateInput }));
   };
 
-  // Switch Track
-  const handleSelectTrack = (track: 'ECE' | 'RA' | 'DA') => {
+  // Switch Track between RA and DA
+  const handleSelectTrack = (track: 'RA' | 'DA') => {
     setState(prev => ({ ...prev, selectedTrack: track }));
+    setActivePaper(track);
   };
 
   return (
@@ -337,10 +526,12 @@ export const DashboardView: React.FC = () => {
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
               <span className="text-indigo-400">GATE 2027</span>
               <span>·</span>
-              <span className="text-amber-400">{state.selectedTrack} Study Dashboard</span>
+              <span className={state.selectedTrack === 'RA' ? 'text-amber-400' : 'text-teal-400'}>
+                {state.selectedTrack === 'RA' ? 'Robotics & Automation (RA)' : 'Data Science & AI (DA)'} Dashboard
+              </span>
             </h1>
             <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-              Live Tracker
+              Live Prep
             </span>
           </div>
           <p className="text-slate-400 text-sm mt-1">
@@ -351,37 +542,29 @@ export const DashboardView: React.FC = () => {
           </p>
         </div>
 
-        {/* Track / Stream Selector */}
+        {/* Paper Track Switcher: Strictly RA & DA */}
         <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 gap-1 self-start md:self-auto">
           <button
-            onClick={() => handleSelectTrack('ECE')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-              state.selectedTrack === 'ECE'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            ECE Track
-          </button>
-          <button
             onClick={() => handleSelectTrack('RA')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${
               state.selectedTrack === 'RA'
-                ? 'bg-amber-600 text-slate-950 font-bold shadow-sm'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            Robotics (RA)
+            <Cpu className="w-3.5 h-3.5" />
+            <span>Robotics & Automation (RA)</span>
           </button>
           <button
             onClick={() => handleSelectTrack('DA')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center gap-1.5 ${
               state.selectedTrack === 'DA'
-                ? 'bg-teal-600 text-white shadow-sm'
+                ? 'bg-teal-600 text-white font-bold shadow-sm'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            Data Science (DA)
+            <Brain className="w-3.5 h-3.5" />
+            <span>Data Science & AI (DA)</span>
           </button>
         </div>
       </div>
@@ -478,7 +661,7 @@ export const DashboardView: React.FC = () => {
           </div>
           <div className="text-[11px] text-slate-400 mt-2">
             {streak > 0 ? (
-              <span className="text-emerald-400 font-semibold">Keep the fire burning!</span>
+              <span className="text-emerald-400 font-semibold">Keep momentum strong!</span>
             ) : (
               <span>Log study today to start streak</span>
             )}
@@ -556,7 +739,7 @@ export const DashboardView: React.FC = () => {
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
                 <Target className="w-4 h-4 text-emerald-400" />
-                <span>Today’s Study Directives</span>
+                <span>Today’s Study Directives ({state.selectedTrack})</span>
               </h2>
               <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
                 {dayName}
@@ -564,7 +747,7 @@ export const DashboardView: React.FC = () => {
             </div>
 
             <div className="text-xs text-slate-400 font-mono mb-2">
-              Phase Focus: <span className="text-slate-200">{currentPhaseIndex >= 0 ? FOCUS_PHASE_DESCRIPTIONS[currentPhaseIndex] : 'Syllabus mastery'}</span>
+              Phase Focus: <span className="text-slate-200">{currentPhaseDescription}</span>
             </div>
 
             <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3 text-sm text-slate-200 leading-relaxed mb-4">
@@ -578,7 +761,9 @@ export const DashboardView: React.FC = () => {
                 <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <div>
                   <span className="text-slate-400">Next Recommended Topic: </span>
-                  <strong className="text-amber-400">{nextUncheckedSubject.name}</strong>
+                  <strong className={state.selectedTrack === 'RA' ? 'text-amber-400' : 'text-teal-400'}>
+                    {nextUncheckedSubject.name}
+                  </strong>
                   <span className="text-slate-400"> → </span>
                   <span className="text-white font-medium underline underline-offset-2">{nextUncheckedTopic}</span>
                 </div>
@@ -586,7 +771,7 @@ export const DashboardView: React.FC = () => {
             ) : (
               <div className="text-xs text-emerald-400 font-medium flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4" />
-                <span>All topics checked! Move on to continuous mock testing & formula drilling.</span>
+                <span>All {state.selectedTrack} topics checked! Proceed to full timed mock tests & formula revision.</span>
               </div>
             )}
           </div>
@@ -787,10 +972,10 @@ export const DashboardView: React.FC = () => {
 
             <div className="bg-slate-950/60 border border-slate-800/90 rounded-lg p-3 text-xs text-slate-400 space-y-2">
               <p>
-                Default slot is <strong className="text-slate-200">6 Feb 2027</strong> (first weekend of GATE 2027 by IIT Madras).
+                Default slot is <strong className="text-slate-200">6 Feb 2027</strong> (GATE 2027 by IIT Madras).
               </p>
               <p>
-                Once IIT Madras releases your admit card with exact branch schedule, you can adjust this date and your countdown & study pacing will automatically sync.
+                Once IIT Madras releases your admit card with exact session schedule for <strong className="text-slate-300">{state.selectedTrack}</strong>, adjust this date to keep your countdown & pacing aligned.
               </p>
             </div>
           </div>
@@ -814,7 +999,7 @@ export const DashboardView: React.FC = () => {
           <div>
             <h2 className="text-lg font-bold text-white flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-indigo-400" />
-              <span>Syllabus Preparation & Topic Checklist ({state.selectedTrack})</span>
+              <span>Syllabus Preparation & Topic Checklist ({state.selectedTrack === 'RA' ? 'Robotics & Automation' : 'Data Science & AI'})</span>
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
               Check off topics as you finish theory & PYQs. Your overall completion percentage and next recommendation automatically recalculate.
@@ -853,14 +1038,14 @@ export const DashboardView: React.FC = () => {
                   <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-3">
                     <div
                       className={`h-full rounded-full transition-all duration-300 ${
-                        isCompleted ? 'bg-emerald-500' : 'bg-indigo-500'
+                        isCompleted ? 'bg-emerald-500' : state.selectedTrack === 'RA' ? 'bg-amber-500' : 'bg-teal-500'
                       }`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
 
                   {/* Topic Checkboxes */}
-                  <div className="space-y-1.5 mt-3">
+                  <div className="space-y-2 mt-3">
                     {subj.topics.map((topicName, idx) => {
                       const isChecked = Boolean(state.done[`${subj.id}_${idx}`]);
                       return (
@@ -875,7 +1060,7 @@ export const DashboardView: React.FC = () => {
                             className="mt-0.5 rounded-sm border-slate-700 bg-slate-950 text-emerald-500 focus:ring-0 focus:ring-offset-0 cursor-pointer"
                           />
                           <span
-                            className={`transition-colors select-none ${
+                            className={`transition-colors select-none leading-relaxed ${
                               isChecked
                                 ? 'text-slate-500 line-through'
                                 : 'text-slate-300 group-hover:text-white'
@@ -907,7 +1092,7 @@ export const DashboardView: React.FC = () => {
       {/* Academic Disclaimer & Official Portal Note */}
       <div className="text-xs text-slate-500 border-t border-slate-800/80 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <p>
-          Topic lists are structured according to GATE organizing norms. Always cross-check with official GATE 2027 updates at{' '}
+          Syllabus is mapped directly to the official GATE 2027 papers for <strong className="text-slate-400">Robotics & Automation (RA)</strong> and <strong className="text-slate-400">Data Science & AI (DA)</strong>. Cross-check updates at{' '}
           <a
             href="https://gate2027.iitm.ac.in/"
             target="_blank"
